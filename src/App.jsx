@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MOVE, SHIPS, SHIP_ICON, flatGameBoard, SHIP_ICON_PC } from './components/constans'
+import { MOVE, SHIPS, SHIP_ICON, flatGameBoard, SHIP_ICON_PC, CURRENT_PLAYER } from './components/constans'
 import { Square } from './components/Square'
 
 
@@ -14,6 +14,7 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false)
   const [playerFleet, setPlayerFleet] = useState(SHIPS);
   const [selectedShip, setSelectedShip] = useState(null);
+  const [isWinner, setIsWinner] = useState(null);
 
   const allShipsPlaced = () => {
     return playerFleet.every(ship => !ship.available); //Verifica que todos los barcos esten False
@@ -39,8 +40,9 @@ function App() {
     setOrientation(!orientation)
   }
 
-  const checkWinner = () => {
-    alert("Felicidades, ganaste!")
+  const checkWinner = (winner) => {
+    // alert("Felicidades, ganaste!")
+    setIsWinner(winner);
   }
 
 
@@ -59,9 +61,9 @@ function App() {
     const shipsRemaining = newComputerBoard.map((value, index) => [value, index]).filter(([value]) => value === SHIP_ICON_PC)
       .map(([, index]) => index);
 
-      if(shipsRemaining.length === 0) {
-        checkWinner()
-      }
+    if (shipsRemaining.length === 0) {
+      checkWinner(CURRENT_PLAYER.player)
+    }
 
     if (gameStarted) {
       computerMove();
@@ -82,8 +84,8 @@ function App() {
     const shipsRemaining = newUserBoard.map((value, index) => [value, index]).filter(([value]) => value === SHIP_ICON)
       .map(([, index]) => index);
 
-    if(shipsRemaining.length === 0) {
-      checkWinner()
+    if (shipsRemaining.length === 0) {
+      checkWinner(CURRENT_PLAYER.computer)
     }
   }
 
@@ -198,6 +200,22 @@ function App() {
     setBoard(newBoard)
   }
 
+  const restartGame = () => {
+
+     // Restablecer todos los barcos a disponibles
+  // const newPlayerFleet = playerFleet.map(ship => {
+  //   return { ...ship, available: true };
+  // });
+  //   // Restablecer el estado del juego a los valores iniciales
+  //   setBoard(flatGameBoard);
+  //   setComputerBoard(flatGameBoard);
+  //   setPlayerFleet(newPlayerFleet);
+  //   setSelectedShip(null);
+  //   setGameStarted(false);
+  //   setIsWinner(null);
+    // Y cualquier otro estado que necesite ser restablecido...
+  }
+
 
 
 
@@ -255,7 +273,28 @@ function App() {
           </div>
         ))}
       </section>
-      {allShipsPlaced() ? <button onClick={startGame}>START</button> : <button onClick={() => changeOrientation()}>{orientation ? "HORIZONTAL" : "VERTICAL"}</button>}
+
+      <section>
+        {allShipsPlaced() ? <button onClick={startGame}>START</button> : <button onClick={() => changeOrientation()}>{orientation ? "HORIZONTAL" : "VERTICAL"}</button>}
+      </section>
+
+      <section>
+
+        {isWinner &&
+
+          (
+            <section className="winner">
+              <div className="text">
+                {isWinner === CURRENT_PLAYER.player ? 'Felicidades, Ganaste!' : 'Lo siento, perdiste.'}
+                <footer>
+                  <button onClick={restartGame}>Empezar de Nuevo</button>
+                </footer>
+              </div>
+            </section>
+          )
+        }
+
+      </section>
     </main>
 
   )
