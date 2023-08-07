@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { MOVE, SHIPS, SHIP_ICON, flatGameBoard, SHIP_ICON_PC, CURRENT_PLAYER } from './components/constans'
 import { Square } from './components/Square'
-
+import confetti from 'canvas-confetti' 
 
 
 function App() {
@@ -48,6 +48,7 @@ function App() {
 
 
   const updateComputerBoard = (index) => {
+    if (!gameStarted) return;
     const newComputerBoard = [...computerBoard];
 
     if (newComputerBoard[index] === 0) {
@@ -63,6 +64,7 @@ function App() {
 
     if (shipsRemaining.length === 0) {
       checkWinner(CURRENT_PLAYER.player)
+      confetti()
     }
 
     if (gameStarted) {
@@ -72,6 +74,7 @@ function App() {
 
 
   const updateUserBoard = (index) => {
+
     const newUserBoard = [...board];
 
     if (newUserBoard[index] === 0) {
@@ -156,6 +159,8 @@ function App() {
 
   const updateBoard = (index) => {
 
+    if (gameStarted) return;
+
     const newBoard = [...board]
 
     if (selectedShip) {
@@ -189,6 +194,7 @@ function App() {
 
 
     } else {
+      if (!gameStarted) return;  // Si el juego no ha comenzado, no permitir "hits".
       if (newBoard[index] === SHIP_ICON) {  // 1 representa un barco
         newBoard[index] = MOVE.hit;
       } else if (newBoard[index] === 0) {  // 0 representa empty
@@ -245,7 +251,7 @@ function App() {
         <section className="game">
 
           {
-            board.map((_, index) => {
+            computerBoard.map((_, index) => {
               return (
                 <Square
                   key={index}
