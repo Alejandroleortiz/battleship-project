@@ -181,12 +181,12 @@ function App() {
         }
       }
 
-      SHIPS[shipNumber].available = false;
-      setShipNumber(null)
+      const updatedPlayerFleet = [...playerFleet];
+      updatedPlayerFleet[shipNumber].available = false;
+      setShipNumber(null);
+      setSelectedShip(null);
+      setPlayerFleet(updatedPlayerFleet);
 
-      setSelectedShip(null)
-
-      setPlayerFleet(SHIPS)
 
     } else {
       if (newBoard[index] === SHIP_ICON) {  // 1 representa un barco
@@ -202,18 +202,17 @@ function App() {
 
   const restartGame = () => {
 
-     // Restablecer todos los barcos a disponibles
-  // const newPlayerFleet = playerFleet.map(ship => {
-  //   return { ...ship, available: true };
-  // });
-  //   // Restablecer el estado del juego a los valores iniciales
-  //   setBoard(flatGameBoard);
-  //   setComputerBoard(flatGameBoard);
-  //   setPlayerFleet(newPlayerFleet);
-  //   setSelectedShip(null);
-  //   setGameStarted(false);
-  //   setIsWinner(null);
-    // Y cualquier otro estado que necesite ser restablecido...
+    //Restablecer todos los barcos a disponibles
+    const newPlayerFleet = playerFleet.map(ship => {
+      return { ...ship, available: true };
+    });
+    // Restablecer el estado del juego a los valores iniciales
+    setBoard([...flatGameBoard]);
+    setComputerBoard([...flatGameBoard]);
+    setPlayerFleet(newPlayerFleet);
+    setSelectedShip(null);
+    setGameStarted(false);
+    setIsWinner(null);
   }
 
 
