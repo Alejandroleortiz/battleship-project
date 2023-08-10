@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { MOVE, SHIPS, SHIP_ICON, flatGameBoard, SHIP_ICON_PC, CURRENT_PLAYER } from './components/constans'
 import { Square } from './components/Square'
-import confetti from 'canvas-confetti' 
+import confetti from 'canvas-confetti'
 
 
 function App() {
@@ -48,6 +48,9 @@ function App() {
 
 
   const updateComputerBoard = (index) => {
+    // Si el juego no ha comenzado o el cuadrado ya ha sido marcado, no hagas nada.
+    if (!gameStarted || computerBoard[index] === MOVE.empty || computerBoard[index] === MOVE.hit) return;
+
     if (!gameStarted) return;
     const newComputerBoard = [...computerBoard];
 
